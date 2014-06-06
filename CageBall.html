@@ -5,33 +5,35 @@
     <link href="Styles/CageBallStyles.css" rel="stylesheet" />
     <script src="Scripts/jquery-1.11.1.js"></script>
     <script>
-        function drawBackground() {
-            automaticResize();
-        }
+        function resizeBackground() {
+            gameBackgroundImage = document.getElementById('gameBackground');
+            widthOfImage = gameBackgroundImage.getAttribute('width');
+            heightOfImage = gameBackgroundImage.getAttribute('height');
 
-        function automaticResize() {
-            var gameBackgroundImage = document.getElementById('gameBackground');
-            var widthOfImage = gameBackgroundImage.getAttribute('width');
+            svgLayer = document.getElementById('svgContent');
+            svgLayerViewBox = svgLayer.getAttribute('viewBox');
 
-            setInterval(function () {
-                if (width == 800) {
-                    clearInterval();
+
+            var resizer = setInterval(function () {
+                if (widthOfImage == 800 || heightOfImage == 600) {
+                    clearInterval(automaticResize);
                 }
 
-                var widthOfSvgLayer = svgContent.getAttribute('viewBox').value;
+                gameBackgroundImage.setAttribute('width', widthOfImage - 1);
+                gameBackgroundImage.setAttribute('height', heightOfImage - 1);
 
-                svgLayer.setAttribute('viewBox', '0 0 ' + (widthOfImage - 1) + ' ' + (height - 1))
-                gameBackground.setAttribute('width', width - 1);
-            }, 1500);
+                widthOfImage = gameBackgroundImage.getAttribute('width');
+                heightOfImage = gameBackgroundImage.getAttribute('height');
+            }, 3);
         }
     </script>
 </head>
 <body>
     <div id="wrapper">
         <svg id="svgContent" viewBox="0 0 900 700" preserveAspectRatio="defer">
-            <image id="gameBackground" xlink:href="Images/Siberischer_tiger_de_edit02.jpg" width="100%" height="100%" />
+            <image id="gameBackground" xlink:href="Images/Siberischer_tiger_de_edit02.jpg" width="900" height="700" />
         </svg>
     </div>
-    <input type="button" onclick="drawBackground()" value="Draw" />
+    <input type="button" onclick="resizeBackground()" value="Draw" />
 </body>
 </html>
