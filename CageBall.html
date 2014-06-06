@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="Styles/CageBallStyles.css" rel="stylesheet" />
+    <script src="Scripts/jquery-1.11.1.js"></script>
+    <script>
+        function drawBackground() {
+            automaticResize();
+        }
+
+        function automaticResize() {
+            var gameBackgroundImage = document.getElementById('gameBackground');
+            var widthOfImage = gameBackgroundImage.getAttribute('width');
+
+            setInterval(function () {
+                if (width == 800) {
+                    clearInterval();
+                }
+
+                var widthOfSvgLayer = svgContent.getAttribute('viewBox').value;
+
+                svgLayer.setAttribute('viewBox', '0 0 ' + (widthOfImage - 1) + ' ' + (height - 1))
+                gameBackground.setAttribute('width', width - 1);
+            }, 1500);
+        }
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <svg id="svgContent" viewBox="0 0 900 700" preserveAspectRatio="defer">
+            <image id="gameBackground" xlink:href="Images/Siberischer_tiger_de_edit02.jpg" width="100%" height="100%" />
+        </svg>
+    </div>
+    <input type="button" onclick="drawBackground()" value="Draw" />
+</body>
+</html>
