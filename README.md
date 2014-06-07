@@ -1,9 +1,11 @@
 Cageball
 ========
-TODO:
+1. Field resizing - Alex
 
-1. Start screen(resizing background picture, etc) - Alex
+2. Player - Martin, Ilvie
 
-2. Moving player - Martin
+2.1 Movement - Ilvie
 
-3. Bouncing enemies - Lubo
+2.2 Drawing and filling path - Martin
+
+3. Enemies - Ivan
