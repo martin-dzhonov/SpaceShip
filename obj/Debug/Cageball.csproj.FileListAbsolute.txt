@@ -1,0 +1,6 @@
+c:\users\martin\documents\visual studio 2013\Projects\Cageball\Cageball\bin\Cageball.dll.config
+c:\users\martin\documents\visual studio 2013\Projects\Cageball\Cageball\bin\Cageball.dll
+c:\users\martin\documents\visual studio 2013\Projects\Cageball\Cageball\bin\Cageball.pdb
+c:\users\martin\documents\visual studio 2013\Projects\Cageball\Cageball\obj\Debug\Cageball.csprojResolveAssemblyReference.cache
+c:\users\martin\documents\visual studio 2013\Projects\Cageball\Cageball\obj\Debug\Cageball.dll
+c:\users\martin\documents\visual studio 2013\Projects\Cageball\Cageball\obj\Debug\Cageball.pdb
