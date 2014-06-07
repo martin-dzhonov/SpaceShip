@@ -10,14 +10,9 @@
             var widthOfImage = gameBackgroundImage.getAttribute('width');
             var heightOfImage = gameBackgroundImage.getAttribute('height');
 
-<<<<<<< HEAD:CageBall.html
             var svgLayer = document.getElementById('svgContent');
             var svgLayerViewBox = svgLayer.getAttribute('viewBox');
 
-=======
-            //var svgLayer = document.getElementById('svgContent');
-            //var svgLayerViewBox = svgLayer.getAttribute('viewBox');
->>>>>>> e34da8459b131d25b2201feb3d18e444e2e3f286:Cageball/CageBall.html
             var resizer = setInterval(function () {
                 if (widthOfImage == 800 || heightOfImage == 600) {
                     clearInterval(resizer);
@@ -25,7 +20,7 @@
 
                 gameBackgroundImage.setAttribute('width', widthOfImage - 1);
                 gameBackgroundImage.setAttribute('height', heightOfImage - 1);
-
+				
                 widthOfImage = gameBackgroundImage.getAttribute('width');
                 heightOfImage = gameBackgroundImage.getAttribute('height');
 
