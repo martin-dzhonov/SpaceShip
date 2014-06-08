@@ -6,27 +6,31 @@
     <script src="Scripts/jquery-1.11.1.js"></script>
 	<script src="Scripts/kinetic-v5.1.0.min.js"></script>
     <script>
-        function resizeBackground() {
+		function resizeBackground() {
             var gameBackgroundImage = document.getElementById('gameBackground');
             var widthOfImage = gameBackgroundImage.getAttribute('width');
             var heightOfImage = gameBackgroundImage.getAttribute('height');
-
-            var svgLayer = document.getElementById('svgContent');
-            var svgLayerViewBox = svgLayer.getAttribute('viewBox');
+            opacityOfImage = gameBackgroundImage.getAttribute('opacity');
 
             var resizer = setInterval(function () {
-                if (widthOfImage == 800 || heightOfImage == 600) {
+                if (widthOfImage == 801 || heightOfImage == 601) {
                     clearInterval(resizer);
                 }
 
                 gameBackgroundImage.setAttribute('width', widthOfImage - 1);
                 gameBackgroundImage.setAttribute('height', heightOfImage - 1);
+                gameBackgroundImage.setAttribute('opacity', opacityOfImage - 0.0095);
 				
                 widthOfImage = gameBackgroundImage.getAttribute('width');
                 heightOfImage = gameBackgroundImage.getAttribute('height');
+                opacityOfImage = gameBackgroundImage.getAttribute('opacity');
 
-                svgLayer.setAttribute('viewBox', '0 0 ' + (widthOfImage - 1) + ' ' + (heightOfImage - 1));
             }, 3);
+
+            var svgLayer = document.getElementById('svgContent');
+            var svgLayerViewBox = svgLayer.getAttribute('viewBox');
+
+            svgLayer.setAttribute('viewBox', '0 0 ' + (widthOfImage) + ' ' + (heightOfImage));
         }
     </script>
 </head>
