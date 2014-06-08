@@ -51,6 +51,9 @@
         if (event.keyCode == downArrowCode) {
             animateInDirection(playerCircle, 0, stepSize);
         }
+        if (event.keyCode == 32) {
+            anim.stop();
+        }
     })
 
     function animateInDirection(node, newX, newY) {
