@@ -15,6 +15,8 @@
         width: 800,
         height: 600,
         fill: "black",
+        stroke: 'blue',
+        strokeWidth: 21,
     })
 
     var playerX = 6;
@@ -35,10 +37,10 @@
     var rightArrowCode = 39;
     var upArrowCode = 38;
     var downArrowCode = 40;
-    var stepSize = 4;
-
+    var stepSize = 3;
     var anim = new Kinetic.Animation();
     document.addEventListener('keydown', function (event) {
+        anim.stop();
         if (event.keyCode == leftArrowCode) {
             animateInDirection(playerCircle, -stepSize, 0);
         }
@@ -51,19 +53,39 @@
         if (event.keyCode == downArrowCode) {
             animateInDirection(playerCircle, 0, stepSize);
         }
-        if (event.keyCode == 32) {
-            anim.stop();
-        }
     })
 
+
     function animateInDirection(node, newX, newY) {
-        anim.stop();
         anim = new Kinetic.Animation(function () {
-            node.move({ x: newX, y: newY }, 1);
+            node.move({ x: newX, y: newY }, 0);
         }, layer);
-        if (!anim.isRunning()) {
-            anim.start();
+        stopAtPerimeter();
+        anim.start();
+    }
+
+    function stopAtPerimeter() {
+        if (playerCircle.x() < playerRadius) {
+            anim.stop();
+            playerCircle.setPosition({ x: playerRadius, y: playerCircle.y() });
+            playerCircle.draw();
+        }
+        if (playerCircle.y() < playerRadius) {
+            anim.stop();
+            playerCircle.setPosition({ x: playerCircle.x(), y: playerRadius });
+            playerCircle.draw();
+        }
+        if (playerCircle.x() > fieldWidth - playerRadius) {
+            anim.stop();
+            playerCircle.setPosition({ x: fieldWidth - playerRadius, y: playerCircle.y() });
+            playerCircle.draw();
+        }
+        if (playerCircle.y() > fieldHeight - playerRadius) {
+            anim.stop();
+            playerCircle.setPosition({ x: playerCircle.x(), y: fieldHeight - playerRadius });
+            playerCircle.draw();
         }
     }
+    window.setInterval(stopAtPerimeter, 5);
     return stage;
 }());
