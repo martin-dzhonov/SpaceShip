@@ -1,5 +1,17 @@
-﻿var size = 10, dir;
+﻿(function () {
+
+  var keys = {};
+		
+  window.addEventListener ("keydown", function(event){
+	 keys[event.which] = true;
+  });
+  window.addEventListener("keyup", function(event){
+	delete keys[event.which];
+  });
+  
+var size = 10, dir;
 var stage, layer;
+var speed = 30;
 
 var gameFieldWidth = 100, gameFieldHeight = 100;
 var gameField = [[], []];
@@ -12,7 +24,6 @@ function initKinetic() {
 		height: 350
 	});
 	layer = new Kinetic.Layer();
-	stage.add(layer);
 }
 
 var Cell = function (x, y) {
@@ -21,15 +32,18 @@ var Cell = function (x, y) {
 	this.color = "black";
 	this.x = x;
 	this.y = y;
+	
+	this.circle = new Kinetic.Circle({
+		x: this.x * size  + size / 2,
+		y: this.y * size  + size / 2,
+		radius: size / 2,
+		fill: 'red',
+		visible: false
+	});
+	
 	this.show = function () {
-		var circle = new Kinetic.Circle({
-			x: this.x * size  + size / 2,
-			y: this.y * size  + size / 2,
-			radius: size / 2,
-			fill: 'red',
-		});
-		layer.add(circle);
-		layer.draw();
+		this.circle.show();
+		this.circle.draw();
 	}
 }
 
@@ -65,7 +79,9 @@ function initGameField() {
 				fill: cell.color,
 				stroke: 'white'
 			});
+			
 			layer.add(rect);
+			layer.add(cell.circle);
 		}
 	}
 }
@@ -85,30 +101,27 @@ function processNextMove(x, y) {
 }
 
 function processUserInput() {
-	document.onkeydown = function (e) {
-		var key = e.keyCode;
-		if(key == 37) {
-			setTimeout(function() { processNextMove(player.x - 1, player.y); }, 30);
-		} else if(key == 38) {
-			setTimeout(function() { processNextMove(player.x, player.y - 1); }, 30);
-		} else if (key == 39) {
-			setTimeout(function() { processNextMove(player.x + 1, player.y); }, 30);
-		} else if(key == 40) {
-			setTimeout(function() { processNextMove(player.x, player.y + 1); }, 30);
-		}
-
-		if (key) e.preventDefault();
-		
+	if(keys[37]) {
+		processNextMove(player.x - 1, player.y);
+	} else if(keys[38]) {
+		processNextMove(player.x, player.y - 1);
+	} else if (keys[39]) {
+		processNextMove(player.x + 1, player.y);
+	} else if(keys[40]) {
+		processNextMove(player.x, player.y + 1);
 	}
+	
+	setTimeout(processUserInput, 10);
 }
 
 function init() {
 	initKinetic();
 	initGameField();
 	initPlayer();
-	layer.draw();
 	
 	processUserInput();
 }
 
 init();
+stage.add(layer);
+}());
