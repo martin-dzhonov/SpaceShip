@@ -36,6 +36,7 @@
     var upArrowCode = 38;
     var downArrowCode = 40;
     var stepSize = 4;
+
     var anim = new Kinetic.Animation();
     document.addEventListener('keydown', function (event) {
         if (event.keyCode == leftArrowCode) {
