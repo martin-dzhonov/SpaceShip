@@ -70,6 +70,8 @@
     <Content Include="Scripts\Background.js" />
     <Content Include="Scripts\jquery-1.11.1.js" />
     <Content Include="Scripts\kinetic-v5.1.0.min.js" />
+    <Content Include="Scripts\player-module\main.js" />
+    <Content Include="Scripts\player-module\playerTest.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
