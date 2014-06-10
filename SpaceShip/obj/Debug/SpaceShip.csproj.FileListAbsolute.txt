@@ -1,0 +1,6 @@
+E:\Telerik Academy\Projects\SpaceShip\SpaceShip\bin\SpaceShip.dll.config
+E:\Telerik Academy\Projects\SpaceShip\SpaceShip\bin\SpaceShip.dll
+E:\Telerik Academy\Projects\SpaceShip\SpaceShip\bin\SpaceShip.pdb
+E:\Telerik Academy\Projects\SpaceShip\SpaceShip\obj\Debug\SpaceShip.csprojResolveAssemblyReference.cache
+E:\Telerik Academy\Projects\SpaceShip\SpaceShip\obj\Debug\SpaceShip.dll
+E:\Telerik Academy\Projects\SpaceShip\SpaceShip\obj\Debug\SpaceShip.pdb

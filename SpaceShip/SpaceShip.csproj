@@ -127,7 +127,9 @@
     <Content Include="bower_components\kineticjs\src\Stage.js" />
     <Content Include="bower_components\kineticjs\src\Tween.js" />
     <Content Include="bower_components\kineticjs\src\Util.js" />
+    <Content Include="images\spaceshipsprites.gif" />
     <Content Include="index.html" />
+    <Content Include="scripts\player.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
