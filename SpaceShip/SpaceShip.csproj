@@ -130,6 +130,9 @@
     <Content Include="images\spaceshipsprites.gif" />
     <Content Include="index.html" />
     <Content Include="scripts\player.js" />
+    <Content Include="scripts\raphael.js" />
+    <Content Include="scripts\soundPlayer.js" />
+    <Content Include="Sounds\Shiiit.mp3" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

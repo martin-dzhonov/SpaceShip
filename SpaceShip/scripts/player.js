@@ -1,9 +1,10 @@
 ﻿window.onload = function () {
-    var moveStep = 2,
+    var moveStep = 6,
         screenWidth = 640,
         screenHeight = 480,
         playerStartPosX = screenWidth / 2,
-        playerStartPosY = screenHeight - 50;
+        playerStartPosY = screenHeight - 50,
+        allProjectiles = [];
 
     var stage = new Kinetic.Stage({
         container: 'ship-container',
@@ -11,6 +12,7 @@
         height: screenHeight
     }),
         layer = new Kinetic.Layer,
+        projectileLayer = new Kinetic.Layer,
         imageObj = new Image();
 
     imageObj.onload = function () {
@@ -51,6 +53,7 @@
 
         layer.add(playerShip);
         stage.add(layer);
+        stage.add(projectileLayer);
         playerShip.start();
 
         window.addEventListener('keydown', function (ev) {
@@ -102,9 +105,50 @@
             }
         }
 
-        window.addEventListener('keyup', function () {
-            playerShip.animation('idlePosition');
-        })
+        function shoot() {
+            var currentProjectile = new Kinetic.Sprite({
+                x: playerShip.attrs.x + 19,
+                y: playerShip.attrs.y,
+                image: imageObj,
+                animation: 'simpleFire',
+                animations: {
+                    simpleFire: [
+                        9, 131, 3, 7,
+                        4, 131, 3, 9
+                    ]
+                }
+            })
+            allProjectiles.push(currentProjectile);
+            projectileLayer.add(currentProjectile);
+            currentProjectile.start();
+        }
+
+        function updateProjectiles() {
+            for (var i = 0, len = allProjectiles.length; i < len; i++) {
+                allProjectiles[i].setY(allProjectiles[i].attrs.y -= 5);
+                if (allProjectiles[i].attrs.y < 0) {
+                    allProjectiles.shift();
+                }
+            }
+        }
+
+        window.addEventListener('keyup', function (ev) {
+            switch (ev.keyCode) {
+                case 32:
+                    shoot();
+                    break;
+                default:
+                    playerShip.animation('idlePosition');
+                    break;
+            }
+        });
+
+
+        function update() {
+            updateProjectiles();
+        }
+
+        var runGame = setInterval(update, 10);
     };
 
     imageObj.src = 'images/spaceshipsprites.gif'
