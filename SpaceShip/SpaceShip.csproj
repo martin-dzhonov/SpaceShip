@@ -57,6 +57,12 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bower_components\kineticjs\.bower.json" />
+    <Content Include="bower_components\kineticjs\bower-template.json" />
+    <Content Include="bower_components\kineticjs\bower.json" />
+    <Content Include="bower_components\kineticjs\package.json" />
+    <Content Include="bower_components\kineticjs\presentation-schedule.md" />
+    <Content Include="bower_components\kineticjs\README.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -65,6 +71,63 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bower_components\kineticjs\doc-includes\ContainerParams.txt" />
+    <Content Include="bower_components\kineticjs\doc-includes\NodeParams.txt" />
+    <Content Include="bower_components\kineticjs\doc-includes\ShapeParams.txt" />
+    <Content Include="bower_components\kineticjs\Gruntfile.js" />
+    <Content Include="bower_components\kineticjs\kinetic.js" />
+    <Content Include="bower_components\kineticjs\kinetic.min.js" />
+    <Content Include="bower_components\kineticjs\nodejs-demo.js" />
+    <Content Include="bower_components\kineticjs\server.js" />
+    <Content Include="bower_components\kineticjs\src\Animation.js" />
+    <Content Include="bower_components\kineticjs\src\BaseLayer.js" />
+    <Content Include="bower_components\kineticjs\src\Canvas.js" />
+    <Content Include="bower_components\kineticjs\src\Container.js" />
+    <Content Include="bower_components\kineticjs\src\Context.js" />
+    <Content Include="bower_components\kineticjs\src\DragAndDrop.js" />
+    <Content Include="bower_components\kineticjs\src\Factory.js" />
+    <Content Include="bower_components\kineticjs\src\FastLayer.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Blur.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Brighten.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Emboss.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Enhance.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Grayscale.js" />
+    <Content Include="bower_components\kineticjs\src\filters\HSL.js" />
+    <Content Include="bower_components\kineticjs\src\filters\HSV.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Invert.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Kaleidoscope.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Mask.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Noise.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Pixelate.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Posterize.js" />
+    <Content Include="bower_components\kineticjs\src\filters\RGB.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Sepia.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Solarize.js" />
+    <Content Include="bower_components\kineticjs\src\filters\Threshold.js" />
+    <Content Include="bower_components\kineticjs\src\Global.js" />
+    <Content Include="bower_components\kineticjs\src\Group.js" />
+    <Content Include="bower_components\kineticjs\src\Layer.js" />
+    <Content Include="bower_components\kineticjs\src\Node.js" />
+    <Content Include="bower_components\kineticjs\src\plugins\Label.js" />
+    <Content Include="bower_components\kineticjs\src\plugins\Path.js" />
+    <Content Include="bower_components\kineticjs\src\plugins\RegularPolygon.js" />
+    <Content Include="bower_components\kineticjs\src\plugins\Star.js" />
+    <Content Include="bower_components\kineticjs\src\plugins\TextPath.js" />
+    <Content Include="bower_components\kineticjs\src\Shape.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Arc.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Circle.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Ellipse.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Image.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Line.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Rect.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Ring.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Sprite.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Text.js" />
+    <Content Include="bower_components\kineticjs\src\shapes\Wedge.js" />
+    <Content Include="bower_components\kineticjs\src\Stage.js" />
+    <Content Include="bower_components\kineticjs\src\Tween.js" />
+    <Content Include="bower_components\kineticjs\src\Util.js" />
+    <Content Include="index.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
