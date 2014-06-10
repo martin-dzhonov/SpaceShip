@@ -1,5 +1,5 @@
 ﻿window.onload = function () {
-    var moveStep = 6,
+    var moveStep = 7,
         screenWidth = 640,
         screenHeight = 480,
         playerStartPosX = screenWidth / 2,
@@ -23,29 +23,29 @@
             animation: 'idlePosition',
             animations: {
                 flyLeft: [
-                    2, 0, 29, 35,
-                    2, 40, 29, 42,
-                    2, 86, 29, 39
+                    2, 0, 30, 36,
+                    2, 40, 30, 43,
+                    2, 86, 30, 40
                 ],
                 flyUp: [
-                    39, 0, 38, 35,
-                    39, 40, 38, 42,
-                    39, 86, 38, 39
+                    39, 0, 39, 36,
+                    39, 40, 39, 43,
+                    39, 86, 39, 40
                 ],
                 flyDown: [
-                    39, 0, 38, 35,
-                    39, 40, 38, 42,
-                    39, 86, 38, 39
+                    39, 0, 39, 36,
+                    39, 40, 39, 43,
+                    39, 86, 39, 40
                 ],
                 flyRight: [
-                    86, 0, 28, 35,
-                    86, 40, 28, 42,
-                    86, 86, 28, 39
+                    86, 0, 29, 36,
+                    86, 40, 29, 43,
+                    86, 86, 29, 40
                 ],
                 idlePosition: [
-                    39, 0, 38, 35,
-                    39, 40, 38, 42,
-                    39, 86, 38, 39
+                    39, 0, 39, 36,
+                    39, 40, 39, 43,
+                    39, 86, 39, 40
                 ],
             },
             frameRate: 30
@@ -115,6 +115,15 @@
                     simpleFire: [
                         9, 131, 3, 7,
                         4, 131, 3, 9
+                    ],
+                    rocket: [
+                        16, 131, 4, 7,
+                        24, 131, 4, 9,
+                        32, 131, 4, 11,
+                        40, 131, 4, 13,
+                        47, 131, 6, 15,
+                        56, 131, 4, 14,
+                        64, 131, 4, 12
                     ]
                 }
             })
@@ -127,6 +136,7 @@
             for (var i = 0, len = allProjectiles.length; i < len; i++) {
                 allProjectiles[i].setY(allProjectiles[i].attrs.y -= 5);
                 if (allProjectiles[i].attrs.y < 0) {
+                    allProjectiles[i].remove();
                     allProjectiles.shift();
                 }
             }
