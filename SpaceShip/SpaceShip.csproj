@@ -129,6 +129,7 @@
     <Content Include="bower_components\kineticjs\src\Util.js" />
     <Content Include="images\spaceshipsprites.gif" />
     <Content Include="index.html" />
+    <Content Include="scripts\enemy.js" />
     <Content Include="scripts\player.js" />
     <Content Include="scripts\raphael.js" />
     <Content Include="scripts\soundPlayer.js" />

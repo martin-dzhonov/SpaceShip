@@ -5,7 +5,7 @@
         playerStartPosX = screenWidth / 2,
         playerStartPosY = screenHeight - 50,
         allProjectiles = [];
-
+    //TODO: Refactor this file to reuse the code and to handle the stage outside.
     var stage = new Kinetic.Stage({
         container: 'ship-container',
         width: screenWidth,
@@ -13,7 +13,30 @@
     }),
         layer = new Kinetic.Layer,
         projectileLayer = new Kinetic.Layer,
-        imageObj = new Image();
+        enemyLayer = new Kinetic.Layer,
+        imageObj = new Image(),
+        enemyImage = new Image();
+
+    enemyImage.onload = function () {
+        var enemy = new Kinetic.Sprite({
+            x: screenWidth /2,
+            y: 50,
+            image: enemyImage,
+            animation: 'idlePosition',
+            animations: {
+                idlePosition: [
+                    0, 0, 139, 136,
+                    39, 140, 139, 143,
+                    39, 186, 139, 140
+                ],
+            },
+            frameRate: 20
+        });
+
+        enemyLayer.add(enemy);
+        stage.add(enemyLayer);
+        enemy.start();
+    }
 
     imageObj.onload = function () {
         var playerShip = new Kinetic.Sprite({
@@ -161,5 +184,6 @@
         var runGame = setInterval(update, 10);
     };
 
-    imageObj.src = 'images/spaceshipsprites.gif'
+    imageObj.src = 'images/spaceshipsprites.gif';
+    enemyImage.src = 'images/enemy.gif';
 }
