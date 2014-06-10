@@ -59,15 +59,19 @@
         window.addEventListener('keydown', function (ev) {
             switch (ev.keyCode) {
                 case 37:
+                case 65:
                     flyLeft();
                     break;
                 case 38:
+                case 87:
                     flyUp();
                     break;
                 case 39:
+                case 68:
                     flyRight();
                     break;
                 case 40:
+                case 83:
                     flyDown();
                     break;
             }
@@ -151,6 +155,10 @@
                     playerShip.animation('idlePosition');
                     break;
             }
+        });
+
+        document.getElementById('body').addEventListener('click', function myfunction() {
+            shoot();
         });
 
 
