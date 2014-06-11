@@ -240,8 +240,8 @@ window.onload = function () {
                 var currentProjectile = allProjectiles[i];
                 for (var j = 0; j < allEnemies.length; j++) {
                     var currentEnemy = allEnemies[j];
-                    if ((currentProjectile.x() > (currentEnemy.x() - 50) && currentProjectile.x() < (currentEnemy.x() + 50))
-                        && (currentProjectile.y() < (currentEnemy.y() + 50))) {
+                    if ((currentProjectile.x() > (currentEnemy.x()) && currentProjectile.x() < (currentEnemy.x() + 60))
+                        && (currentProjectile.y() < (currentEnemy.y() + 60))) {
                         allProjectiles[i].remove();
                         allProjectiles.shift();
                         updateScore();
