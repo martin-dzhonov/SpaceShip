@@ -13,6 +13,7 @@ window.onload = function () {
         playerLayer = new Kinetic.Layer(),
         projectileLayer = new Kinetic.Layer(),
         enemyLayer = new Kinetic.Layer(),
+        enemyProjectileLayer = new Kinetic.Layer(),
         playerSpriteSheet = new Image(),
         enemySprite = new Image(),
         score = 0,
@@ -36,10 +37,12 @@ window.onload = function () {
         stage.add(HUDLayer);
         stage.add(playerLayer);
         stage.add(projectileLayer);
+        stage.add(enemyProjectileLayer);
         stage.add(enemyLayer);
 
         function update() {
             updateProjectiles();
+            updateEnemyProjectiles();
             hitEnemies();
         }
         function generateEnemies() {
@@ -48,7 +51,40 @@ window.onload = function () {
         setInterval(update, 10);
         setInterval(generateEnemies, 1000);
         setInterval(moveEnemies, 10);
+        setInterval(function () {
+            for (var i = 0; i < enemies.length; i++) {
+                enemyShoot(enemies[i]);
+            }
+        }, 1000);
     };
+
+    function enemyShoot(enemy) {
+        var currentEnemyProjectile = new Kinetic.Sprite({
+            x: enemy.attrs.x + 20,
+            y: enemy.attrs.y,
+            image: playerSpriteSheet,
+            animation: 'simpleFire',
+            animations: {
+                simpleFire: [
+                    9, 131, 3, 7,
+                    4, 131, 3, 9
+                ],
+                rocket: [
+                    16, 131, 4, 7,
+                    24, 131, 4, 9,
+                    32, 131, 4, 11,
+                    40, 131, 4, 13,
+                    47, 131, 6, 15,
+                    56, 131, 4, 14,
+                    64, 131, 4, 12
+                ]
+            }
+        });
+
+        enemyProjectiles.push(currentEnemyProjectile);
+        enemyProjectileLayer.add(currentEnemyProjectile);
+        currentEnemyProjectile.start();
+    }
 
     function moveEnemies() {
         var goingLeft = false;
@@ -126,10 +162,12 @@ window.onload = function () {
             width: enemySprite.width,
             heigth: enemySprite.height,
             image: enemySprite,
-        })
+        });
+
+        enemyShoot(enemy);
+
         enemies.push(enemy);
         enemyLayer.add(enemy);
-        enemyLayer.draw();
     }
 
     function executeMovementInput() {
@@ -230,7 +268,6 @@ window.onload = function () {
         }
     }
 
-
     function updateProjectiles() {
         if (playerProjectiles.length > 0) {
             for (var i = 0; i < playerProjectiles.length; i++) {
@@ -240,6 +277,17 @@ window.onload = function () {
                     playerProjectiles.splice(i, 1);
                     projectileLayer.draw();
                 }
+            }
+        }
+    }
+
+    function updateEnemyProjectiles() {
+        for (var i = 0; i < enemyProjectiles.length; i++) {
+            enemyProjectiles[i].setY(enemyProjectiles[i].attrs.y += 5);
+            if (enemyProjectiles[i].attrs.y >= screenHeight) {
+                enemyProjectiles[i].destroy();
+                enemyProjectiles.slice(i, 1);
+                enemyProjectileLayer.draw();
             }
         }
     }
