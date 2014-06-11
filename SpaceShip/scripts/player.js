@@ -1,20 +1,21 @@
 ﻿//TODO: Refactor this file to reuse the code and to handle the stage outside.
 window.onload = function () {
-    var playerShip,
-        moveStep = 7,
-        screenWidth = 640,
-        screenHeight = 480,
+    var screenWidth = 640,
+        screenHeight = 640,
+        playerShip,
         playerStartPosX = screenWidth / 2,
         playerStartPosY = screenHeight - 50,
-        allProjectiles = [],
-        allEnemies = [],
-        score = 0,
+        moveStep = 7,
+        enemies = [],
+        playerProjectiles = [],
+        enemyProjectiles = [],
         HUDLayer = new Kinetic.Layer(),
         playerLayer = new Kinetic.Layer(),
         projectileLayer = new Kinetic.Layer(),
         enemyLayer = new Kinetic.Layer(),
-        imageObj = new Image(),
-        enemyImage = new Image(),
+        playerSpriteSheet = new Image(),
+        enemySprite = new Image(),
+        score = 0,
         scoreText;
 
     var stage = new Kinetic.Stage({
@@ -23,7 +24,7 @@ window.onload = function () {
         height: screenHeight
     });
 
-    imageObj.onload = function () {
+    playerSpriteSheet.onload = function () {
 
         initHUD();
         initEnemies();
@@ -46,16 +47,23 @@ window.onload = function () {
         }
         setInterval(update, 10);
         setInterval(generateEnemies, 1000);
+        setInterval(moveEnemies, 10);
     };
 
+    function moveEnemies() {
+        var goingLeft = false;
+        var goingRight = false;
+        for (var i = 0; i < enemies.length; i++) {
+            enemies[i].move({ x: 0, y: 1 });
+        }
+        enemyLayer.draw();
+    }
 
     function initPlayer() {
         playerShip = new Kinetic.Sprite({
             x: playerStartPosX,
             y: playerStartPosY,
-            width: 100,
-            height: 100,
-            image: imageObj,
+            image: playerSpriteSheet,
             animation: 'idlePosition',
             animations: {
                 flyLeft: [
@@ -114,12 +122,12 @@ window.onload = function () {
     function initEnemies() {
         var enemy = new Kinetic.Image({
             x: Math.floor(Math.random() * screenWidth - 100),
-            y: 50,
-            width: enemyImage.width,
-            heigth: enemyImage.height,
-            image: enemyImage,
+            y: -50,
+            width: enemySprite.width,
+            heigth: enemySprite.height,
+            image: enemySprite,
         })
-        allEnemies.push(enemy);
+        enemies.push(enemy);
         enemyLayer.add(enemy);
         enemyLayer.draw();
     }
@@ -182,7 +190,7 @@ window.onload = function () {
         window.addEventListener('keyup', function (ev) {
             switch (ev.keyCode) {
                 case 32:
-                    shoot();
+                    playerShoot();
                     break;
                 default:
                     playerShip.animation('idlePosition');
@@ -191,14 +199,14 @@ window.onload = function () {
         });
 
         document.getElementById('body').addEventListener('click', function myfunction() {
-            shoot();
+            playerShoot();
         });
 
-        function shoot() {
+        function playerShoot() {
             var currentProjectile = new Kinetic.Sprite({
-                x: playerShip.attrs.x + 19,
+                x: playerShip.attrs.x + 20,
                 y: playerShip.attrs.y,
-                image: imageObj,
+                image: playerSpriteSheet,
                 animation: 'simpleFire',
                 animations: {
                     simpleFire: [
@@ -216,39 +224,42 @@ window.onload = function () {
                     ]
                 }
             })
-            allProjectiles.push(currentProjectile);
+            playerProjectiles.push(currentProjectile);
             projectileLayer.add(currentProjectile);
             currentProjectile.start();
         }
     }
+
+
     function updateProjectiles() {
-        if (allProjectiles.length > 0) {
-            for (var i = 0, len = allProjectiles.length; i < len; i++) {
-                allProjectiles[i].setY(allProjectiles[i].attrs.y -= 5);
-                if (allProjectiles[i].attrs.y < 0) {
-                    allProjectiles[i].remove();
-                    allProjectiles.shift();
+        if (playerProjectiles.length > 0) {
+            for (var i = 0; i < playerProjectiles.length; i++) {
+                playerProjectiles[i].setY(playerProjectiles[i].attrs.y -= 5);
+                if (playerProjectiles[i].attrs.y < 0) {
+                    playerProjectiles[i].destroy();
+                    playerProjectiles.splice(i, 1);
+                    projectileLayer.draw();
                 }
             }
         }
     }
 
     function hitEnemies() {
-        if (allProjectiles.length > 0 && allEnemies.length > 0) {
-            for (var i = 0; i < allProjectiles.length; i++) {
-                var currentProjectile = allProjectiles[i];
-                for (var j = 0; j < allEnemies.length; j++) {
-                    var currentEnemy = allEnemies[j];
+        if (playerProjectiles.length > 0 && enemies.length > 0) {
+            for (var i = 0; i < playerProjectiles.length; i++) {
+                var currentProjectile = playerProjectiles[i];
+                for (var j = 0; j < enemies.length; j++) {
+                    var currentEnemy = enemies[j];
                     if (currentProjectile.x() >= currentEnemy.x()
                         && currentProjectile.x() < currentEnemy.x() + currentEnemy.width()
                         && currentProjectile.y() <= currentEnemy.y() + currentEnemy.height()) {
 
-                        allEnemies[j].destroy();
-                        allEnemies.splice(j, 1);
+                        enemies[j].destroy();
+                        enemies.splice(j, 1);
                         enemyLayer.draw();
 
-                        allProjectiles[i].destroy();
-                        allProjectiles.splice(i, 1);
+                        playerProjectiles[i].destroy();
+                        playerProjectiles.splice(i, 1);
                         projectileLayer.draw();
 
                         updateScore();
@@ -263,6 +274,6 @@ window.onload = function () {
         HUDLayer.draw();
         console.log(scoreText.text());
     }
-    imageObj.src = 'images/spaceshipsprites.gif';
-    enemyImage.src = 'images/enemy.gif';
+    playerSpriteSheet.src = 'images/spaceshipsprites.gif';
+    enemySprite.src = 'images/enemy.gif';
 }
