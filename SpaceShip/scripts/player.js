@@ -48,6 +48,8 @@ window.onload = function () {
         playerShip = new Kinetic.Sprite({
             x: playerStartPosX,
             y: playerStartPosY,
+            width: 100,
+            height: 100,
             image: imageObj,
             animation: 'idlePosition',
             animations: {
@@ -105,24 +107,15 @@ window.onload = function () {
     }
 
     function initEnemies() {
-        var enemy = new Kinetic.Sprite({
+        var enemy = new Kinetic.Image({
             x: screenWidth / 2,
             y: 50,
+            width: enemyImage.width,
+            heigth: enemyImage.height,
             image: enemyImage,
-            animation: 'idlePosition',
-            animations: {
-                idlePosition: [
-                    0, 0, 139, 136,
-                    39, 140, 139, 143,
-                    39, 186, 139, 140
-                ],
-            },
-            frameRate: 20
-        });
-
+        })
         allEnemies.push(enemy);
         enemyLayer.add(enemy);
-        enemy.start();
     }
 
     function executeMovementInput() {
@@ -240,10 +233,18 @@ window.onload = function () {
                 var currentProjectile = allProjectiles[i];
                 for (var j = 0; j < allEnemies.length; j++) {
                     var currentEnemy = allEnemies[j];
-                    if ((currentProjectile.x() > (currentEnemy.x()) && currentProjectile.x() < (currentEnemy.x() + 60))
-                        && (currentProjectile.y() < (currentEnemy.y() + 60))) {
+                    if (currentProjectile.x() >= currentEnemy.x()
+                        && currentProjectile.x() < currentEnemy.x() + currentEnemy.width()
+                        && currentProjectile.y() <= currentEnemy.y() + currentEnemy.height()) {
+
                         allProjectiles[i].remove();
-                        allProjectiles.shift();
+                        allProjectiles[i].destroy();
+                        enemyLayer.remove(allProjectiles[i]);
+
+                        allEnemies[j].destroy();
+                        enemyLayer.remove(allEnemies[j]);
+                        allEnemies.splice(j, 1);
+
                         updateScore();
                     }
                 }
