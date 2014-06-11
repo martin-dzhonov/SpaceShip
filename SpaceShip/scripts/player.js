@@ -41,9 +41,14 @@ window.onload = function () {
             updateProjectiles();
             hitEnemies();
         }
-
-        var runGame = setInterval(update, 10);
+        function generateEnemies() {
+            initEnemies();
+        }
+        setInterval(update, 10);
+        setInterval(generateEnemies, 1000);
     };
+
+
     function initPlayer() {
         playerShip = new Kinetic.Sprite({
             x: playerStartPosX,
@@ -108,7 +113,7 @@ window.onload = function () {
 
     function initEnemies() {
         var enemy = new Kinetic.Image({
-            x: screenWidth / 2,
+            x: Math.floor(Math.random() * screenWidth - 100),
             y: 50,
             width: enemyImage.width,
             heigth: enemyImage.height,
@@ -116,6 +121,7 @@ window.onload = function () {
         })
         allEnemies.push(enemy);
         enemyLayer.add(enemy);
+        enemyLayer.draw();
     }
 
     function executeMovementInput() {
@@ -237,13 +243,13 @@ window.onload = function () {
                         && currentProjectile.x() < currentEnemy.x() + currentEnemy.width()
                         && currentProjectile.y() <= currentEnemy.y() + currentEnemy.height()) {
 
-                        allProjectiles[i].remove();
-                        allProjectiles[i].destroy();
-                        enemyLayer.remove(allProjectiles[i]);
-
                         allEnemies[j].destroy();
-                        enemyLayer.remove(allEnemies[j]);
                         allEnemies.splice(j, 1);
+                        enemyLayer.draw();
+
+                        allProjectiles[i].destroy();
+                        allProjectiles.splice(i, 1);
+                        projectileLayer.draw();
 
                         updateScore();
                     }
