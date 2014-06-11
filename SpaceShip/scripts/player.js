@@ -285,8 +285,9 @@ window.onload = function () {
         for (var i = 0; i < enemyProjectiles.length; i++) {
             enemyProjectiles[i].setY(enemyProjectiles[i].attrs.y += 5);
             if (enemyProjectiles[i].attrs.y >= screenHeight) {
+			    enemyProjectiles[i].remove();
                 enemyProjectiles[i].destroy();
-                enemyProjectiles.slice(i, 1);
+				enemyProjectiles.splice(i, 1);
                 enemyProjectileLayer.draw();
             }
         }
