@@ -28,34 +28,30 @@ window.onload = function () {
     playerSpriteSheet.onload = function () {
 
         initHUD();
-        initEnemies();
         initPlayer();
 
         executeMovementInput();
         executeShootingInput();
 
         stage.add(HUDLayer);
+        stage.add(enemyLayer);
         stage.add(playerLayer);
         stage.add(projectileLayer);
         stage.add(enemyProjectileLayer);
-        stage.add(enemyLayer);
 
         function update() {
-            updateProjectiles();
-            updateEnemyProjectiles();
+            moveEnemies();
+            destroyOutOfScreenProjectiles();
             hitEnemies();
         }
-        function generateEnemies() {
-            initEnemies();
-        }
+        
         setInterval(update, 10);
         setInterval(generateEnemies, 1000);
-        setInterval(moveEnemies, 10);
         setInterval(function () {
             for (var i = 0; i < enemies.length; i++) {
                 enemyShoot(enemies[i]);
             }
-        }, 1000);
+        }, 2000);
     };
 
     function enemyShoot(enemy) {
@@ -87,10 +83,12 @@ window.onload = function () {
     }
 
     function moveEnemies() {
-        var goingLeft = false;
-        var goingRight = false;
         for (var i = 0; i < enemies.length; i++) {
             enemies[i].move({ x: 0, y: 1 });
+            if (enemies[i].y() > screenHeight) {
+                enemies[i].destroy();
+                enemies.splice(i, 1);
+            }
         }
         enemyLayer.draw();
     }
@@ -128,7 +126,7 @@ window.onload = function () {
                     39, 86, 39, 40
                 ],
             },
-            frameRate: 30
+            frameRate: 20,
         });
 
 
@@ -155,17 +153,16 @@ window.onload = function () {
         HUDLayer.add(scoreText);
     }
 
-    function initEnemies() {
+    function generateEnemies() {
         var enemy = new Kinetic.Image({
-            x: Math.floor(Math.random() * screenWidth - 100),
-            y: -50,
+            x: Math.floor((Math.random() * (screenWidth - enemySprite.width))),
+            y: -enemySprite.height,
             width: enemySprite.width,
             heigth: enemySprite.height,
             image: enemySprite,
         });
 
         enemyShoot(enemy);
-
         enemies.push(enemy);
         enemyLayer.add(enemy);
     }
@@ -245,7 +242,7 @@ window.onload = function () {
                 x: playerShip.attrs.x + 20,
                 y: playerShip.attrs.y,
                 image: playerSpriteSheet,
-                animation: 'simpleFire',
+                animation: 'rocket',
                 animations: {
                     simpleFire: [
                         9, 131, 3, 7,
@@ -268,7 +265,7 @@ window.onload = function () {
         }
     }
 
-    function updateProjectiles() {
+    function destroyOutOfScreenProjectiles() {
         if (playerProjectiles.length > 0) {
             for (var i = 0; i < playerProjectiles.length; i++) {
                 playerProjectiles[i].setY(playerProjectiles[i].attrs.y -= 5);
@@ -276,22 +273,21 @@ window.onload = function () {
                     playerProjectiles[i].destroy();
                     playerProjectiles.splice(i, 1);
                     projectileLayer.draw();
+                }              
+            }
+        }
+        if (enemyProjectiles.length > 0) {
+            for (var j = 0; j < enemyProjectiles.length; j++) {
+                enemyProjectiles[j].setY(enemyProjectiles[j].attrs.y += 5);
+                if (enemyProjectiles[j].attrs.y >= screenHeight) {
+                    enemyProjectiles[j].destroy();
+                    enemyProjectiles.splice(j, 1);
+                    enemyProjectileLayer.draw();
                 }
             }
         }
     }
 
-    function updateEnemyProjectiles() {
-        for (var i = 0; i < enemyProjectiles.length; i++) {
-            enemyProjectiles[i].setY(enemyProjectiles[i].attrs.y += 5);
-            if (enemyProjectiles[i].attrs.y >= screenHeight) {
-			    enemyProjectiles[i].remove();
-                enemyProjectiles[i].destroy();
-				enemyProjectiles.splice(i, 1);
-                enemyProjectileLayer.draw();
-            }
-        }
-    }
 
     function hitEnemies() {
         if (playerProjectiles.length > 0 && enemies.length > 0) {
