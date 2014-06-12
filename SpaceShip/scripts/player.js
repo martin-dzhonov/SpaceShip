@@ -43,15 +43,39 @@ window.onload = function () {
             moveEnemies();
             destroyOutOfScreenProjectiles();
             hitEnemies();
+            hitPlayer();
         }
         
-        setInterval(update, 10);
-        setInterval(generateEnemies, 1000);
-        setInterval(function () {
+        var runGame = setInterval(update, 10);
+        var enemyGeneration = setInterval(generateEnemies, 1000);
+        var enemyShooting = setInterval(function () {
             for (var i = 0; i < enemies.length; i++) {
                 enemyShoot(enemies[i]);
             }
         }, 2000);
+
+        function hitPlayer() {
+            if (enemyProjectiles.length > 0) {
+                for (var i = 0; i < enemyProjectiles.length; i++) {
+                    var currentProjectyle = enemyProjectiles[i];
+                    // TODO: Fix magic numbers!
+                    if ((currentProjectyle.attrs.x >= playerShip.attrs.x) &&
+                        (currentProjectyle.attrs.x <= playerShip.attrs.x + 38) &&
+                        (currentProjectyle.attrs.y >= playerShip.attrs.y) &&
+                        (currentProjectyle.attrs.x <= playerShip.attrs.y + 42)) {
+
+                        playerShip.animation('explode');
+
+                        //enemyProjectiles.length = 0; doesn't work
+                        //console.log(enemyProjectiles);
+                        clearInterval(runGame);
+                        clearInterval(enemyGeneration);
+                        clearInterval(enemyShooting);
+
+                    }
+                }
+            }
+        }
     };
 
     function enemyShoot(enemy) {
@@ -125,8 +149,20 @@ window.onload = function () {
                     39, 40, 39, 43,
                     39, 86, 39, 40
                 ],
+                explode: [
+					18, 363, 44, 44,
+					103, 367, 33, 35,
+					19, 516, 35, 35,
+					97, 514, 39, 34,
+					177, 512, 40, 41,
+					17, 442, 45, 44,
+					93, 440, 56, 50,
+					6, 586, 62, 56,
+					81, 580, 70, 68,
+					159, 576, 76, 73
+                ]
             },
-            frameRate: 20,
+            frameRate: 10,
         });
 
 
@@ -319,6 +355,6 @@ window.onload = function () {
         HUDLayer.draw();
         console.log(scoreText.text());
     }
-    playerSpriteSheet.src = 'images/spaceshipsprites.gif';
+    playerSpriteSheet.src = 'images/player-sprite.png';
     enemySprite.src = 'images/enemy.gif';
 }

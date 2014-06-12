@@ -127,6 +127,8 @@
     <Content Include="bower_components\kineticjs\src\Stage.js" />
     <Content Include="bower_components\kineticjs\src\Tween.js" />
     <Content Include="bower_components\kineticjs\src\Util.js" />
+    <Content Include="images\enemy.gif" />
+    <Content Include="images\player-sprite.png" />
     <Content Include="images\spaceshipsprites.gif" />
     <Content Include="index.html" />
     <Content Include="scripts\enemy.js" />
