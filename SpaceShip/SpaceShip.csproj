@@ -130,6 +130,7 @@
     <Content Include="images\enemy.gif" />
     <Content Include="images\player-sprite.png" />
     <Content Include="images\spaceshipsprites.gif" />
+    <Content Include="images\starry-sky.jpg" />
     <Content Include="index.html" />
     <Content Include="scripts\enemy.js" />
     <Content Include="scripts\player.js" />
