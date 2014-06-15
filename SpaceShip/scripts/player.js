@@ -230,7 +230,7 @@ window.onload = function () {
 
         function flyRight() {
             playerShip.animation('flyRight');
-            playerShip.setX(playerShip.attrs.x += moveStep);
+            playerShip.setX(playerShip.attrs.x += 2* moveStep);
             if (playerShip.attrs.x > screenWidth - 38) {
                 playerShip.attrs.x = screenWidth - 38;
             }
