@@ -5,8 +5,9 @@ window.onload = function () {
 
     var playerShip,
         playerStartPosX = screenWidth / 2,
-        playerStartPosY = screenHeight - 50,
-        moveStep = 7;
+        playerStartPosY = screenHeight - 100,
+        moveStep = 7,
+        playerHealth = 100;
 
     var enemies = [],
         playerProjectiles = [],
@@ -17,11 +18,20 @@ window.onload = function () {
         playerLayer = new Kinetic.Layer(),
         projectileLayer = new Kinetic.Layer(),
         enemyLayer = new Kinetic.Layer(),
-        enemyProjectileLayer = new Kinetic.Layer(),
-        playerSpriteSheet = new Image(),
-        enemySprite = new Image(),
+        enemyProjectileLayer = new Kinetic.Layer();
+
+    var playerSpriteSheet = new Image(),
+        firstEnemySprite = new Image(),
+        secondEnemySprite = new Image(),
+        bossSprite = new Image(),
         starSkyImageObj = new Image(),
-        score = 0,
+        playerHealthBar = new Image(),
+        bossHealthBar = new Image();
+
+    var bossTime = false,
+        bossHealth = 500;
+
+    var score = 0,
         scoreText;
 
     var stage = new Kinetic.Stage({
@@ -30,7 +40,7 @@ window.onload = function () {
         height: screenHeight
     });
 
-    starSkyImageObj.onload = function () {
+    playerSpriteSheet.onload = function () {
 
         initHUD();
         initPlayer();
@@ -40,43 +50,64 @@ window.onload = function () {
 
         addLayers();
 
-        var enemyGeneration = setInterval(generateEnemies, 1000);
+        var enemyGenerationInterval = setInterval(generateEnemies, 2500);
 
-        var enemyShooting = setInterval(function () {
-            for (var i = 0; i < enemies.length; i++) {
-                enemyShoot(enemies[i]);
-            }
-        }, 3000);
+        var enemyShootingInterval = setInterval(allEnemiesShoot, 2000);
 
-        var runGame = setInterval(update, 10);
+        var updateInterval = setInterval(update, 10);
 
         function update() {
             moveEnemies();
             destroyOutOfScreenProjectiles();
             hitEnemies();
-            hitPlayer();
-            stopExplosions()
+            stopExplosions();
+
+            if (playerHit()) {
+                updateHealth();
+            }
+
+            if (playerHealth <= 0) {
+                killPlayer();
+            }
+
+            if (score > 1000 && !bossTime) {
+                clearAllIntervals();
+                updateInterval = setInterval(bossLevelUpdate, 10);
+                enemyShootingInterval = setInterval(bossShoot, 2000);
+                generateBoss();
+                bossTime = true;
+            }
+        }
+        function bossLevelUpdate() {
+            moveBoss();
+            destroyOutOfScreenProjectiles();
+            hitBoss();
+            stopExplosions();
+
+            if (playerHit()) {
+                updateHealth();
+            }
+
+            if (playerHealth <= 0) {
+                killPlayer();
+            }
         }
 
-        function hitPlayer() {
-            if (enemyProjectiles.length > 0) {
-                for (var i = 0; i < enemyProjectiles.length; i++) {
-                    var currentProjectyle = enemyProjectiles[i];
-                    // TODO: Fix magic numbers!
-                    if ((currentProjectyle.attrs.x >= playerShip.attrs.x) &&
-                        (currentProjectyle.attrs.x <= playerShip.attrs.x + 38) &&
-                        (currentProjectyle.attrs.y >= playerShip.attrs.y) &&
-                        (currentProjectyle.attrs.x <= playerShip.attrs.y + 42)) {
+        function killPlayer() {
+            playerShip.animation('explode');
+            clearAllIntervals();
+            removeKeyPressListeners();
+        }
 
-                        playerShip.animation('explode');
-                        window.removeEventListener('keydown', executeMovementInput);
-                        window.removeEventListener('click', playerShoot);
-                        clearInterval(runGame);
-                        clearInterval(enemyGeneration);
-                        clearInterval(enemyShooting);
-                    }
-                }
-            }
+        function clearAllIntervals() {
+            clearInterval(updateInterval);
+            clearInterval(enemyGenerationInterval);
+            clearInterval(enemyShootingInterval);
+        }
+
+        function removeKeyPressListeners() {
+            window.removeEventListener('keydown', executeMovementInput);
+            window.removeEventListener('click', playerShoot);
         }
     };
 
@@ -89,18 +120,32 @@ window.onload = function () {
             width: 640,
             height: 640
         });
-        HUDLayer.add(starSky);
 
-        scoreText = new Kinetic.Text({
-            x: 15,
+        var healthBarImageObj = new Image();
+
+        playerHealthBar = new Kinetic.Image({
+            x: 400,
             y: 15,
-            text: '0',
-            fontSize: 20,
-            fontFamily: 'Calibri',
-            fill: 'yellow'
+            image: healthBarImageObj,
+            width: playerHealth * 2,
+            height: 15
         });
 
+        healthBarImageObj.src = 'images/redsquare.png';
+
+        scoreText = new Kinetic.Text({
+            x: 25,
+            y: 15,
+            text: '0',
+            fontSize: 22,
+            fontFamily: 'Consolas',
+            fill: 'red'
+        });
+
+        HUDLayer.add(starSky);
+        HUDLayer.add(playerHealthBar);
         HUDLayer.add(scoreText);
+
     }
 
     function initPlayer() {
@@ -177,7 +222,7 @@ window.onload = function () {
         }
         function flyLeft() {
             playerShip.animation('flyLeft');
-            playerShip.setX(playerShip.attrs.x -= moveStep);
+            playerShip.setX(playerShip.attrs.x -= 2* moveStep);
             if (playerShip.attrs.x < 0) {
                 playerShip.attrs.x = 0;
             }
@@ -185,7 +230,7 @@ window.onload = function () {
 
         function flyRight() {
             playerShip.animation('flyRight');
-            playerShip.setX(playerShip.attrs.x += moveStep);
+            playerShip.setX(playerShip.attrs.x += 2* moveStep);
             if (playerShip.attrs.x > screenWidth - 38) {
                 playerShip.attrs.x = screenWidth - 38;
             }
@@ -244,45 +289,136 @@ window.onload = function () {
     }
 
     function generateEnemies() {
-        var enemy = new Kinetic.Image({
-            x: Math.floor((Math.random() * (screenWidth - enemySprite.width))),
-            y: -enemySprite.height,
-            width: enemySprite.width,
-            heigth: enemySprite.height,
-            image: enemySprite,
-        });
 
-        enemyShoot(enemy);
-        enemies.push(enemy);
-        enemyLayer.add(enemy);
+        var enemyWidth = 64;
+        var enemyHeight = 95;
+
+        var sprite = firstEnemySprite;
+
+        var rndSpriteNum = getRandomInt(0, 1);
+
+        switch (rndSpriteNum) {
+            case 0:
+                sprite = firstEnemySprite;
+                break;
+            case 1:
+                sprite = secondEnemySprite;
+                break;
+        }
+
+        var rndFormationNum = getRandomInt(0, 3);
+
+        switch (rndFormationNum) {
+            case 0:
+                //single
+                var enemy = new Kinetic.Image({
+                    x: getRandomInt(0, screenWidth - enemyWidth),
+                    y: -enemyHeight,
+                    width: enemyWidth,
+                    heigth: enemyHeight,
+                    image: sprite,
+                });
+                enemies.push(enemy);
+                enemyLayer.add(enemy);
+                break;
+            case 1:
+                //triangle formation
+                var middle = new Kinetic.Image({
+                    x: getRandomInt(enemyWidth + 10, screenWidth - (enemyWidth * 2)),
+                    y: -enemyHeight,
+                    width: enemyWidth,
+                    heigth: enemyHeight,
+                    image: sprite,
+                });
+                var left = new Kinetic.Image({
+                    x: middle.x() - enemyWidth,
+                    y: -enemyHeight * 2,
+                    width: enemyWidth,
+                    heigth: enemyHeight,
+                    image: sprite,
+                });
+                var right = new Kinetic.Image({
+                    x: middle.x() + enemyWidth,
+                    y: -enemyHeight * 2,
+                    width: enemyWidth,
+                    heigth: enemyHeight,
+                    image: sprite,
+                });
+                enemies.push(middle);
+                enemyLayer.add(middle);
+                enemies.push(left);
+                enemyLayer.add(left);
+                enemies.push(right);
+                enemyLayer.add(right);
+                break;
+            case 2:
+                //diagonal
+                var second = new Kinetic.Image({
+                    x: getRandomInt(enemyWidth + 10, screenWidth - (enemyWidth * 2)),
+                    y: -enemyHeight * 2,
+                    width: enemyWidth,
+                    heigth: enemyHeight,
+                    image: sprite,
+                });
+                var first = new Kinetic.Image({
+                    x: second.x() - enemyWidth,
+                    y: -enemyHeight,
+                    width: enemyWidth,
+                    heigth: enemyHeight,
+                    image: sprite,
+                });
+                var third = new Kinetic.Image({
+                    x: second.x() + enemyWidth,
+                    y: -enemyHeight * 3,
+                    width: enemyWidth,
+                    heigth: enemyHeight,
+                    image: sprite,
+                });
+                enemies.push(first);
+                enemyLayer.add(first);
+                enemies.push(second);
+                enemyLayer.add(second);
+                enemies.push(third);
+                enemyLayer.add(third);
+                break;
+            case 3:
+                //nothing spawns
+                break;
+        }
+    }
+
+    function allEnemiesShoot() {
+
+        for (var i = 0; i < enemies.length; i++) {
+            enemyShoot(enemies[i]);
+
+        }
     }
 
     function enemyShoot(enemy) {
-        var currentEnemyProjectile = new Kinetic.Sprite({
-            x: enemy.attrs.x + 30,
-            y: enemy.attrs.y + 50,
-            image: playerSpriteSheet,
-            animation: 'simpleFire',
-            animations: {
-                simpleFire: [
-                    9, 131, 3, 7,
-                    4, 131, 3, 9
-                ],
-                rocket: [
-                    16, 131, 4, 7,
-                    24, 131, 4, 9,
-                    32, 131, 4, 11,
-                    40, 131, 4, 13,
-                    47, 131, 6, 15,
-                    56, 131, 4, 14,
-                    64, 131, 4, 12
-                ]
-            }
-        });
 
-        enemyProjectiles.push(currentEnemyProjectile);
-        enemyProjectileLayer.add(currentEnemyProjectile);
-        currentEnemyProjectile.start();
+        var rnd = getRandomInt(0, 1);
+        switch (rnd) {
+            case 0:
+                var currentEnemyProjectile = new Kinetic.Sprite({
+                    x: enemy.attrs.x + 30,
+                    y: enemy.attrs.y + 50,
+                    image: playerSpriteSheet,
+                    animation: 'simpleFire',
+                    animations: {
+                        simpleFire: [
+                            9, 131, 3, 7,
+                            4, 131, 3, 9
+                        ],
+                    }
+                });
+
+                enemyProjectiles.push(currentEnemyProjectile);
+                enemyProjectileLayer.add(currentEnemyProjectile);
+                currentEnemyProjectile.start();
+                break;
+        }
+
     }
 
     function moveEnemies() {
@@ -362,7 +498,7 @@ window.onload = function () {
                         && currentProjectile.x() < currentEnemy.x() + currentEnemy.width()
                         && currentProjectile.y() <= currentEnemy.y() + currentEnemy.height()) {
 
-                        playExplosionAt(currentEnemy.x(), currentEnemy.y());
+                        playExplosionAt(currentEnemy.x() + 20, currentEnemy.y() + 30);
 
                         //remove destroyed enemy
                         enemies[j].destroy();
@@ -381,6 +517,12 @@ window.onload = function () {
         }
     }
 
+    function updateScore() {
+        score += 165;
+        scoreText.text(score);
+        HUDLayer.draw();
+    }
+
     function stopExplosions() {
         for (var i = 0; i < explosions.length; i++) {
             if (explosions[i].frameIndex() === 9) {
@@ -389,13 +531,152 @@ window.onload = function () {
         }
     }
 
-    function updateScore() {
-        score += 150;
-        scoreText.text(score);
-        HUDLayer.draw();
+    function playerHit() {
+        if (enemyProjectiles.length > 0) {
+            for (var i = 0; i < enemyProjectiles.length; i++) {
+                var currentProjectyle = enemyProjectiles[i];
+                // TODO: Fix magic numbers!
+                if ((currentProjectyle.x() >= playerShip.x()) &&
+                    (currentProjectyle.x() <= playerShip.x() + 38) &&
+                    (currentProjectyle.y() >= playerShip.y()) &&
+                    (currentProjectyle.y() <= playerShip.y() + 42)) {
+
+                    enemyProjectiles[i].destroy();
+                    enemyProjectiles.splice(i, 1);
+                    projectileLayer.draw();
+
+                    return true;
+
+                }
+            }
+
+            return false;
+        }
+    }
+
+    function updateHealth() {
+        playerHealth -= 25;
+        if (playerHealth > 0) {
+            playerHealthBar.width(playerHealth * 2);
+            playerHealthBar.draw();
+            HUDLayer.draw();
+        }
+    }
+
+    function hitBoss() {
+
+        for (var i = 0; i < playerProjectiles.length; i++) {
+            var currentProjectile = playerProjectiles[i];
+            for (var j = 0; j < enemies.length; j++) {
+                var currentEnemy = enemies[j];
+
+                //collision detection
+                if (currentProjectile.x() >= currentEnemy.x()
+                    && currentProjectile.x() < currentEnemy.x() + currentEnemy.width()
+                    && currentProjectile.y() <= currentEnemy.y() + currentEnemy.height()) {
+
+                    playExplosionAt(currentEnemy.x() + 30, currentEnemy.y() + 30);
+                    playExplosionAt(currentEnemy.x() + 250, currentEnemy.y() + 30);
+                    playExplosionAt(currentEnemy.x() + 160, currentEnemy.y() + 200);
+                    playExplosionAt(currentEnemy.x() + 170, currentEnemy.y() + 50);
+                    bossHealth -= 5;
+                    bossHealthBar.width(bossHealth);
+                    bossHealthBar.draw();
+                    HUDLayer.draw();
+                    //remove destroyed projectile
+                    playerProjectiles[i].destroy();
+                    playerProjectiles.splice(i, 1);
+                    projectileLayer.draw();
+
+                    updateScore();
+                }
+            }
+        }
+
+    }
+
+    function generateBoss() {
+        for (var i = 0; i < enemies.length; i++) {
+            enemies[i].destroy();
+            enemies.splice(i, 1);
+            enemyLayer.draw();
+        }
+        enemies = new Array();
+        enemyLayer.draw();
+
+        var healthBarImageObj = new Image();
+
+        bossHealthBar = new Kinetic.Image({
+            x: 70,
+            y: 600,
+            image: healthBarImageObj,
+            width: bossHealth,
+            height: 15
+        });
+
+        healthBarImageObj.src = 'images/redsquare.png';
+        HUDLayer.add(bossHealthBar);
+
+        var bossWidth = 338;
+        var bossHeight = 265;
+
+        var boss = new Kinetic.Image({
+            x: 150,
+            y: -bossHeight,
+            width: bossWidth,
+            heigth: bossHeight,
+            image: bossSprite,
+        });
+        enemies.push(boss);
+        enemyLayer.add(boss);
+    }
+
+    function moveBoss() {
+        for (var i = 0; i < enemies.length; i++) {
+            enemies[i].move({ x: 0, y: 1 });
+            if (enemies[i].y() > 30) {
+                enemies[i].y(30);
+            }
+        }
+        enemyLayer.draw();
+    }
+
+    function bossShoot() {
+        var enemy = enemies[0];
+        var rnd = getRandomInt(0, 1);
+        switch (rnd) {
+            case 0:
+                for (var i = enemy.x() ; i < enemy.width() + enemy.x() ; i += 20) {
+
+
+                    var currentEnemyProjectile = new Kinetic.Sprite({
+                        x: i,
+                        y: enemy.attrs.y + 50,
+                        image: playerSpriteSheet,
+                        animation: 'simpleFire',
+                        animations: {
+                            simpleFire: [
+                                9, 131, 3, 7,
+                                4, 131, 3, 9
+                            ],
+                        }
+                    });
+
+                    enemyProjectiles.push(currentEnemyProjectile);
+                    enemyProjectileLayer.add(currentEnemyProjectile);
+                    currentEnemyProjectile.start();
+                }
+                break;
+        }
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     playerSpriteSheet.src = 'images/player-sprite.png';
-    enemySprite.src = 'images/enemy.gif';
+    firstEnemySprite.src = 'images/enemy1.png';
+    bossSprite.src = 'images/boss.png';
+    secondEnemySprite.src = 'images/enemy2.png';
     starSkyImageObj.src = 'images/starry-sky.jpg';
 }

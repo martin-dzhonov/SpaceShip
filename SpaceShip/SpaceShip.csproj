@@ -127,8 +127,12 @@
     <Content Include="bower_components\kineticjs\src\Stage.js" />
     <Content Include="bower_components\kineticjs\src\Tween.js" />
     <Content Include="bower_components\kineticjs\src\Util.js" />
+    <Content Include="images\boss.png" />
     <Content Include="images\enemy.gif" />
+    <Content Include="images\enemy1.png" />
+    <Content Include="images\enemy2.png" />
     <Content Include="images\player-sprite.png" />
+    <Content Include="images\redsquare.png" />
     <Content Include="images\spaceshipsprites.gif" />
     <Content Include="images\starry-sky.jpg" />
     <Content Include="index.html" />
