@@ -78,7 +78,7 @@
                 showEndScreen();
             }
 
-            if (score > 1500 && !bossTime) {
+            if (score > 150 && !bossTime) {
                 clearAllIntervals();
                 updateInterval = setInterval(update, 10);
                 generateBoss();
@@ -565,7 +565,7 @@
                 //collision detection
                 if (currentProjectile.x() >= currentEnemy.x()
                     && currentProjectile.x() < currentEnemy.x() + currentEnemy.width()
-                    && currentProjectile.y() <= currentEnemy.y() + currentEnemy.height()) {
+                    && currentProjectile.y() <= currentEnemy.y() + currentEnemy.height() - 100) {
 
                     playExplosionAt(currentEnemy.x() + 30, currentEnemy.y() + 30);
                     playExplosionAt(currentEnemy.x() + 250, currentEnemy.y() + 30);
@@ -584,7 +584,6 @@
                 }
             }
         }
-
     }
 
     function generateBoss() {
