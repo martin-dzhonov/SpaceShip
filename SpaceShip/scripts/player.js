@@ -222,7 +222,7 @@ window.onload = function () {
         }
         function flyLeft() {
             playerShip.animation('flyLeft');
-            playerShip.setX(playerShip.attrs.x -= 2* moveStep);
+            playerShip.setX(playerShip.attrs.x -= moveStep);
             if (playerShip.attrs.x < 0) {
                 playerShip.attrs.x = 0;
             }
@@ -230,7 +230,7 @@ window.onload = function () {
 
         function flyRight() {
             playerShip.animation('flyRight');
-            playerShip.setX(playerShip.attrs.x += 2* moveStep);
+            playerShip.setX(playerShip.attrs.x += moveStep);
             if (playerShip.attrs.x > screenWidth - 38) {
                 playerShip.attrs.x = screenWidth - 38;
             }
