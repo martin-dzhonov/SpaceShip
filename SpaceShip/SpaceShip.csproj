@@ -136,11 +136,11 @@
     <Content Include="images\spaceshipsprites.gif" />
     <Content Include="images\starry-sky.jpg" />
     <Content Include="index.html" />
-    <Content Include="scripts\enemy.js" />
-    <Content Include="scripts\player.js" />
+    <Content Include="scripts\buttonEvents.js" />
+    <Content Include="scripts\main.js" />
     <Content Include="scripts\raphael.js" />
     <Content Include="scripts\soundPlayer.js" />
-    <Content Include="Sounds\Shiiit.mp3" />
+    <Content Include="styles\styles.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

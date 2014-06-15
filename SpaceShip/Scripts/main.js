@@ -1,5 +1,4 @@
-﻿//TODO: Refactor this file to reuse the code and to handle the stage outside.
-window.onload = function () {
+﻿window.onload = function () {
     var screenWidth = 640,
         screenHeight = 620;
 
@@ -33,6 +32,9 @@ window.onload = function () {
     var score = 0,
         scoreText;
 
+    var movingBackground,
+        endScreen;
+
     var stage = new Kinetic.Stage({
         container: 'ship-container',
         width: screenWidth,
@@ -43,6 +45,7 @@ window.onload = function () {
 
         initHUD();
         initPlayer();
+        getSVG();
 
         window.addEventListener('keydown', executeMovementInput);
         window.addEventListener('click', playerShoot);
@@ -56,39 +59,31 @@ window.onload = function () {
         var updateInterval = setInterval(update, 10);
 
         function update() {
-            moveEnemies();
-            destroyOutOfScreenProjectiles();
-            hitEnemies();
-            stopExplosions();
 
-            if (playerHit()) {
-                updateHealth();
+            if (bossTime) {
+                moveBoss();
+                hitBoss();
             }
+            else {
+                moveEnemies();
+                hitEnemies();
+            }
+
+            destroyOutOfScreenProjectiles();
+            stopExplosions();
+            updateHealth();
 
             if (playerHealth <= 0) {
                 killPlayer();
+                showEndScreen();
             }
 
-            if (score > 1000 && !bossTime) {
+            if (score > 1500 && !bossTime) {
                 clearAllIntervals();
-                updateInterval = setInterval(bossLevelUpdate, 10);
-                enemyShootingInterval = setInterval(bossShoot, 2000);
+                updateInterval = setInterval(update, 10);
                 generateBoss();
+                enemyShootingInterval = setInterval(bossShoot, 2000);
                 bossTime = true;
-            }
-        }
-        function bossLevelUpdate() {
-            moveBoss();
-            destroyOutOfScreenProjectiles();
-            hitBoss();
-            stopExplosions();
-
-            if (playerHit()) {
-                updateHealth();
-            }
-
-            if (playerHealth <= 0) {
-                killPlayer();
             }
         }
 
@@ -189,6 +184,11 @@ window.onload = function () {
 
         playerLayer.add(playerShip);
         playerShip.start();
+    }
+
+    function getSVG() {
+        movingBackground = document.getElementById("movingBackground");
+        endScreen = document.getElementById("endScreen");
     }
 
     function executeMovementInput(ev) {
@@ -545,11 +545,13 @@ window.onload = function () {
     }
 
     function updateHealth() {
-        playerHealth -= 25;
-        if (playerHealth > 0) {
-            playerHealthBar.width(playerHealth * 2);
-            playerHealthBar.draw();
-            HUDLayer.draw();
+        if (playerHit()) {
+            playerHealth -= 25;
+            if (playerHealth > 0) {
+                playerHealthBar.width(playerHealth * 2);
+                playerHealthBar.draw();
+                HUDLayer.draw();
+            }
         }
     }
 
@@ -567,8 +569,8 @@ window.onload = function () {
 
                     playExplosionAt(currentEnemy.x() + 30, currentEnemy.y() + 30);
                     playExplosionAt(currentEnemy.x() + 250, currentEnemy.y() + 30);
-                    playExplosionAt(currentEnemy.x() + 160, currentEnemy.y() + 200);
-                    playExplosionAt(currentEnemy.x() + 170, currentEnemy.y() + 50);
+                    playExplosionAt(currentEnemy.x() + 155, currentEnemy.y() + 200);
+                    playExplosionAt(currentEnemy.x() + 155, currentEnemy.y() + 90);
                     bossHealth -= 5;
                     bossHealthBar.width(bossHealth);
                     bossHealthBar.draw();
@@ -658,6 +660,12 @@ window.onload = function () {
                 }
                 break;
         }
+    }
+
+    function showEndScreen() {
+        endScreen.style.visibility = "visible";
+        movingBackground.style.visibility = "hidden";
+        endScreen.style.zIndex = 11;
     }
 
     function getRandomInt(min, max) {
