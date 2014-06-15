@@ -24,7 +24,6 @@ window.onload = function () {
         firstEnemySprite = new Image(),
         secondEnemySprite = new Image(),
         bossSprite = new Image(),
-        starSkyImageObj = new Image(),
         playerHealthBar = new Image(),
         bossHealthBar = new Image();
 
@@ -112,15 +111,6 @@ window.onload = function () {
     };
 
     function initHUD() {
-
-        var starSky = new Kinetic.Image({
-            x: 0,
-            y: 0,
-            image: starSkyImageObj,
-            width: 640,
-            height: 640
-        });
-
         var healthBarImageObj = new Image();
 
         playerHealthBar = new Kinetic.Image({
@@ -142,7 +132,7 @@ window.onload = function () {
             fill: 'red'
         });
 
-        HUDLayer.add(starSky);
+        //HUDLayer.add(starSky);
         HUDLayer.add(playerHealthBar);
         HUDLayer.add(scoreText);
 
@@ -678,5 +668,4 @@ window.onload = function () {
     firstEnemySprite.src = 'images/enemy1.png';
     bossSprite.src = 'images/boss.png';
     secondEnemySprite.src = 'images/enemy2.png';
-    starSkyImageObj.src = 'images/starry-sky.jpg';
 }

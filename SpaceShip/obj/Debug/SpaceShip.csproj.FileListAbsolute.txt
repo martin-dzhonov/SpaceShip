@@ -10,3 +10,9 @@ C:\Users\Martin\Documents\Visual Studio 2013\Projects\GitHub\SpaceShip\SpaceShip
 C:\Users\Martin\Documents\Visual Studio 2013\Projects\GitHub\SpaceShip\SpaceShip\obj\Debug\SpaceShip.csprojResolveAssemblyReference.cache
 C:\Users\Martin\Documents\Visual Studio 2013\Projects\GitHub\SpaceShip\SpaceShip\obj\Debug\SpaceShip.dll
 C:\Users\Martin\Documents\Visual Studio 2013\Projects\GitHub\SpaceShip\SpaceShip\obj\Debug\SpaceShip.pdb
+C:\Users\Martin\Desktop\project\SpaceShip\SpaceShip\bin\SpaceShip.dll.config
+C:\Users\Martin\Desktop\project\SpaceShip\SpaceShip\bin\SpaceShip.dll
+C:\Users\Martin\Desktop\project\SpaceShip\SpaceShip\bin\SpaceShip.pdb
+C:\Users\Martin\Desktop\project\SpaceShip\SpaceShip\obj\Debug\SpaceShip.csprojResolveAssemblyReference.cache
+C:\Users\Martin\Desktop\project\SpaceShip\SpaceShip\obj\Debug\SpaceShip.dll
+C:\Users\Martin\Desktop\project\SpaceShip\SpaceShip\obj\Debug\SpaceShip.pdb
