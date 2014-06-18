@@ -49,6 +49,7 @@
 
         window.addEventListener('keydown', executeMovementInput);
         window.addEventListener('click', playerShoot);
+        window.addEventListener('keyup', playerRestoreIdle);
 
         addLayers();
 
@@ -78,7 +79,7 @@
                 showEndScreen();
             }
 
-            if (score > 150 && !bossTime) {
+            if (score > 2500 && !bossTime) {
                 clearAllIntervals();
                 updateInterval = setInterval(update, 10);
                 generateBoss();
@@ -240,6 +241,17 @@
             if (playerShip.attrs.y > screenHeight - 42) {
                 playerShip.attrs.y = screenHeight - 42;
             }
+        }
+    }
+
+    function playerRestoreIdle(ev) {
+        switch (ev.keyCode) {
+            case 32:
+                shoot();
+                break;
+            default:
+                playerShip.animation('idlePosition');
+                break;
         }
     }
 
@@ -591,6 +603,7 @@
             enemies[i].destroy();
             enemies.splice(i, 1);
             enemyLayer.draw();
+            i--;
         }
         enemies = new Array();
         enemyLayer.draw();

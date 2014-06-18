@@ -7,7 +7,7 @@ var noButtonText = document.getElementById('noButtonText');
 
 //YES BUTTON EVENTS
 yesButton.addEventListener('click', function () {
-    alert('This message should be replaced with a proper function about starting a new game!');
+    location.reload(true);
 });
 yesButton.addEventListener('mouseover', function () {
     this.style.opacity = 1;
@@ -18,7 +18,7 @@ yesButton.addEventListener('mouseout', function () {
 
 //YES BUTTON TEXT EVENTS
 yesButtonText.addEventListener('click', function () {
-    alert('This message should be replaced with a proper function about starting a new game!');
+    location.reload(true);
 })
 
 //NO BUTTON EVENTS
