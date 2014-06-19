@@ -76,7 +76,7 @@
     <Content Include="bower_components\kineticjs\doc-includes\ShapeParams.txt" />
     <Content Include="bower_components\kineticjs\Gruntfile.js" />
     <Content Include="bower_components\kineticjs\kinetic.js" />
-    <Content Include="bower_components\kineticjs\kinetic.min.js" />
+    <Content Include="libs\kinetic.min.js" />
     <Content Include="bower_components\kineticjs\nodejs-demo.js" />
     <Content Include="bower_components\kineticjs\server.js" />
     <Content Include="bower_components\kineticjs\src\Animation.js" />
@@ -138,7 +138,7 @@
     <Content Include="index.html" />
     <Content Include="scripts\buttonEvents.js" />
     <Content Include="scripts\main.js" />
-    <Content Include="scripts\raphael.js" />
+    <Content Include="libs\raphael.js" />
     <Content Include="scripts\soundPlayer.js" />
     <Content Include="styles\styles.css" />
     <Content Include="Web.config" />
